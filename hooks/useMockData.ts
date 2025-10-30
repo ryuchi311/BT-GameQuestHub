@@ -1,0 +1,226 @@
+
+import { User, Quest, QuestPlatform, QuestDifficulty, QuestType, VerificationType, LeaderboardUser, Reward, ActivityLog, ActivityType } from '../types';
+
+const mockUser: User = {
+    id: 'user-main',
+    name: 'TamagoPlayer',
+    avatarUrl: 'https://i.pravatar.cc/150?u=tamagoplayer',
+    level: 12,
+    xp: 1850,
+    maxXp: 2500,
+    points: 12345,
+    questsCompleted: 28,
+    telegramUsername: '@tamagoplayer',
+    twitterUsername: '@tamagoplayer',
+    tiktokUsername: '',
+    discordUsername: 'tamagoplayer#1234',
+};
+
+const mockLeaderboardUsers: User[] = [
+    { id: 'user-1', name: 'Ninja', avatarUrl: 'https://i.pravatar.cc/150?u=ninja', level: 25, xp: 1000, maxXp: 2000, points: 25000, questsCompleted: 55 },
+    { id: 'user-2', name: 'Shadow', avatarUrl: 'https://i.pravatar.cc/150?u=shadow', level: 23, xp: 1200, maxXp: 2000, points: 23500, questsCompleted: 52 },
+    { id: 'user-3', name: 'Phoenix', avatarUrl: 'https://i.pravatar.cc/150?u=phoenix', level: 22, xp: 800, maxXp: 2000, points: 22000, questsCompleted: 48 },
+    { id: 'user-4', name: 'Viper', avatarUrl: 'https://i.pravatar.cc/150?u=viper', level: 20, xp: 1500, maxXp: 2000, points: 20100, questsCompleted: 45 },
+    mockUser,
+    { id: 'user-5', name: 'Rogue', avatarUrl: 'https://i.pravatar.cc/150?u=rogue', level: 11, xp: 500, maxXp: 2000, points: 11500, questsCompleted: 25 },
+    { id: 'user-6', name: 'Blaze', avatarUrl: 'https://i.pravatar.cc/150?u=blaze', level: 10, xp: 1800, maxXp: 2000, points: 10800, questsCompleted: 22 },
+    { id: 'user-7', name: 'Ghost', avatarUrl: 'https://i.pravatar.cc/150?u=ghost', level: 9, xp: 300, maxXp: 2000, points: 9300, questsCompleted: 20 },
+    { id: 'user-8', name: 'Storm', avatarUrl: 'https://i.pravatar.cc/150?u=storm', level: 8, xp: 1100, maxXp: 2000, points: 8400, questsCompleted: 18 },
+    { id: 'user-9', name: 'Raptor', avatarUrl: 'https://i.pravatar.cc/150?u=raptor', level: 7, xp: 900, maxXp: 2000, points: 7600, questsCompleted: 15 },
+    { id: 'user-10', name: 'Newbie', avatarUrl: 'https://i.pravatar.cc/150?u=newbie', level: 1, xp: 100, maxXp: 2000, points: 500, questsCompleted: 2 },
+];
+
+const getLeaderboardData = (): LeaderboardUser[] => {
+    return [...mockLeaderboardUsers]
+        .sort((a, b) => b.points - a.points)
+        .map((user, index) => ({
+            ...user,
+            rank: index + 1,
+        }));
+};
+
+const mockQuests: Quest[] = [
+    {
+        id: '1',
+        title: 'Subscribe to our YouTube Channel',
+        description: 'Click the link, subscribe, and submit a screenshot.',
+        platform: QuestPlatform.YouTube,
+        type: QuestType.Subscribe,
+        reward: 100,
+        difficulty: QuestDifficulty.Easy,
+        verificationType: VerificationType.Manual,
+        questUrl: 'https://www.youtube.com',
+        isNew: true,
+        submissionStatus: 'rejected',
+    },
+    {
+        id: '2',
+        title: 'Follow us on Twitter/X (API)',
+        description: 'Follow our official account. We will verify this automatically using the Twitter API.',
+        platform: QuestPlatform.Twitter,
+        type: QuestType.Follow,
+        reward: 100,
+        difficulty: QuestDifficulty.Easy,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://x.com/gemini',
+        isDaily: true,
+    },
+    {
+        id: '3',
+        title: 'Join the Official Telegram Group',
+        description: 'Become a part of our community on Telegram.',
+        platform: QuestPlatform.Telegram,
+        type: QuestType.Join,
+        reward: 150,
+        difficulty: QuestDifficulty.Easy,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://telegram.org',
+    },
+    {
+        id: '4',
+        title: 'Like a Tweet (API)',
+        description: 'Like our pinned tweet. We will verify this automatically.',
+        platform: QuestPlatform.Twitter,
+        type: QuestType.Like,
+        reward: 50,
+        difficulty: QuestDifficulty.Easy,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://x.com/gemini/status/1',
+        isCompleted: false,
+    },
+    {
+        id: '5',
+        title: 'Watch our new tutorial video',
+        description: 'Watch the full video to learn about the new features and find the code.',
+        platform: QuestPlatform.YouTube,
+        type: QuestType.Watch,
+        reward: 300,
+        difficulty: QuestDifficulty.Medium,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        validationCode: 'GEM123',
+    },
+    {
+        id: '6',
+        title: 'Join our Discord Server',
+        description: 'Join our Discord, then submit your Discord username and a Facebook link to a screenshot of you in the server.',
+        platform: QuestPlatform.Discord,
+        type: QuestType.Join,
+        reward: 200,
+        difficulty: QuestDifficulty.Medium,
+        verificationType: VerificationType.Manual,
+        questUrl: 'https://discord.com',
+    },
+    {
+        id: '7',
+        title: 'Comment on a Tweet (Manual)',
+        description: 'Comment on our latest tweet and provide proof of your interaction.',
+        platform: QuestPlatform.Twitter,
+        type: QuestType.Comment,
+        reward: 150,
+        difficulty: QuestDifficulty.Medium,
+        verificationType: VerificationType.Manual,
+        questUrl: 'https://x.com/gemini/status/2',
+        submissionStatus: 'pending',
+    },
+    {
+        id: '8',
+        title: 'Epic Quest: Create a Fan Video',
+        description: 'Create a short video about Brgy Tamago and post it on TikTok.',
+        platform: QuestPlatform.TikTok,
+        type: QuestType.Share,
+        reward: 2000,
+        difficulty: QuestDifficulty.Epic,
+        verificationType: VerificationType.Manual,
+        questUrl: 'https://tiktok.com',
+        isNew: true,
+    },
+    {
+        id: '9',
+        title: 'Partner Quest: Play Game XYZ',
+        description: 'Download and reach level 5 in our partner\'s game.',
+        platform: QuestPlatform.Partner,
+        type: QuestType.Visit,
+        reward: 800,
+        difficulty: QuestDifficulty.Hard,
+        verificationType: VerificationType.Manual,
+        questUrl: 'https://example.com/partner-game',
+        isDaily: true,
+        isNew: true,
+        isSponsored: true,
+    },
+    {
+        id: '10',
+        title: 'Visit our Blog',
+        description: 'Read our latest development update on our blog.',
+        platform: QuestPlatform.Other,
+        type: QuestType.Visit,
+        reward: 50,
+        difficulty: QuestDifficulty.Easy,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://example.com/blog',
+    },
+    {
+        id: '11',
+        title: 'Daily Referral Quest',
+        description: 'Share your unique referral link with friends. Earn points for every new user who joins!',
+        platform: QuestPlatform.Other,
+        type: QuestType.Referral,
+        reward: 200,
+        difficulty: QuestDifficulty.Medium,
+        verificationType: VerificationType.Automatic,
+        questUrl: 'https://gamehub.com/referral/tamagoplayer',
+        isDaily: true,
+        isNew: true,
+    },
+];
+
+const mockRewards: Reward[] = [
+    {
+        id: 'reward-1',
+        name: '$5 Gift Card',
+        description: 'A digital gift card for your favorite online store.',
+        cost: 5000,
+        imageUrl: 'https://images.unsplash.com/photo-1553456558-aff63285bdd1?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+        id: 'reward-2',
+        name: 'Exclusive Badge',
+        description: 'A unique badge to display on your profile.',
+        cost: 2500,
+        imageUrl: 'https://images.unsplash.com/photo-1599495834433-63349083e35c?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+        id: 'reward-3',
+        name: 'Premium Quest Pack',
+        description: 'Unlock a set of high-reward premium quests.',
+        cost: 10000,
+        imageUrl: 'https://images.unsplash.com/photo-1593697821028-7762cf33e95c?q=80&w=400&auto=format&fit=crop',
+    },
+    {
+        id: 'reward-4',
+        name: 'Profile Customization',
+        description: 'Get a unique animated border for your avatar.',
+        cost: 7500,
+        imageUrl: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=400&auto=format&fit=crop',
+    },
+];
+
+const mockActivities: ActivityLog[] = [
+    { id: 'act-1', type: ActivityType.SUCCESS, description: 'Completed "Follow us on Twitter/X"', date: '2024-07-21', points: 100 },
+    { id: 'act-2', type: ActivityType.CLAIM, description: 'Claimed "Exclusive Badge"', date: '2024-07-20', points: -2500 },
+    { id: 'act-3', type: ActivityType.FAILED, description: 'Submission for "Subscribe to YouTube" rejected', date: '2024-07-19' },
+    { id: 'act-4', type: ActivityType.SUCCESS, description: 'Completed "Join Telegram Group"', date: '2024-07-18', points: 150 },
+    { id: 'act-5', type: ActivityType.SUCCESS, description: 'Completed "Like & Retweet Pinned Post"', date: '2024-07-17', points: 250 },
+    { id: 'act-6', type: ActivityType.FAILED, description: 'Submission for "Watch tutorial video" rejected', date: '2024-07-16' },
+];
+
+export const useMockData = () => {
+    return {
+        user: mockUser,
+        quests: mockQuests,
+        leaderboardData: getLeaderboardData(),
+        rewards: mockRewards,
+        activities: mockActivities,
+    };
+};
