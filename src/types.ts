@@ -69,16 +69,22 @@ export type QuestFilter = 'All' | 'Daily' | 'Socials' | 'Sponsors';
 export interface User {
     id: string;
     name: string;
-    avatarUrl: string;
+    email: string;
+    role: 'user' | 'admin';
+    avatarUrl?: string;
     level: number;
     xp: number;
     maxXp: number;
     points: number;
     questsCompleted: number;
     telegramUsername?: string;
+    telegramId?: number;
     twitterUsername?: string;
     tiktokUsername?: string;
     discordUsername?: string;
+    instagramUsername?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface LeaderboardUser extends User {
@@ -87,10 +93,44 @@ export interface LeaderboardUser extends User {
 
 export interface Reward {
     id: string;
-    name: string;
+    title: string;
+    name?: string; // For backwards compatibility
     description: string;
-    cost: number;
-    imageUrl: string;
+    cost?: number; // For backwards compatibility
+    pointsCost?: number;
+    points_required?: number; // For backwards compatibility
+    imageUrl?: string;
+    status?: 'active' | 'inactive';
+    isActive?: boolean;
+    type: string;
+    quantity?: number;
+    quantityAvailable?: number;
+    quantityClaimed?: number;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface QuestSubmission {
+    id: string;
+    quest_id: string;
+    user_id: string;
+    proof_url?: string;
+    proof_text?: string;
+    status: SubmissionStatus;
+    submitted_at: string;
+    verified_at?: string;
+    verified_by?: string;
+    quest?: Quest;
+    user?: { id: string; name: string; telegram_username?: string };
+}
+
+export interface RewardClaim {
+    id: string;
+    user_id: string;
+    reward_id: string;
+    claimed_at: string;
+    status: 'pending' | 'processed' | 'delivered';
+    reward?: Reward;
 }
 
 export enum ActivityType {
