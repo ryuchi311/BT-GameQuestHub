@@ -16,10 +16,9 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
                 {/* Left side: Branding */}
                 <div className="flex items-center gap-3">
                     <img 
-                        src="https://scontent-lhr8-2.xx.fbcdn.net/v/t39.30808-6/405144911_221130711007912_1482409412144017287_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=G_he4vM2GucQ7kNvwFp7L5c&_nc_oc=Adm9OvV7nyV8fqH0VR3NzvaSt_aLA1LQeKwQpaF_7isxtpOOhT6QO5wmh2jqHkGWw0jhf9Oemtn34CSR4xKKJPPj&_nc_zt=23&_nc_ht=scontent-lhr8-2.xx&_nc_gid=5csNfjoc1LhnjX948og3JA&oh=00_AfcUowIvbY5smY7twlt76XspDKoCP-OGRMeoELAdwv8IIQ&oe=6908A1C3
-                        " 
+                        src="https://placehold.co/200x200/fbbf24/1f2937?text=Brgy+Tamago" 
                         alt="Brgy Tamago GameHub Logo" 
-                        className="w-12 h-12 rounded-full object-cover" 
+                        className="w-12 h-12 rounded-full object-cover border border-yellow-400" 
                     />
                     <div>
                         <h1 className="text-lg font-bold text-white">Brgy Tamago GameHub</h1>

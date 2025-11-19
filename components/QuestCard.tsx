@@ -37,7 +37,7 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest, viewedQuests, onSelect, co
 
     return (
         <div 
-            className={`relative bg-gray-800 rounded-lg p-4 border transition-all duration-300 ${isQuestComplete ? 'opacity-60' : ''} ${isFresh ? 'shadow-lg shadow-yellow-400/20 border-yellow-400/50' : 'border-gray-700'}`}
+            className={`relative bg-gray-800 rounded-lg p-4 border transition-all duration-500 ${isQuestComplete ? 'opacity-60 border-green-500/30 bg-gray-800/80' : ''} ${isFresh ? 'shadow-lg shadow-yellow-400/20 border-yellow-400/50' : 'border-gray-700'}`}
         >
             {isFresh && (
                 <div className="absolute top-0 right-0 -mt-2 -mr-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md z-10">
@@ -88,10 +88,10 @@ const QuestCard: React.FC<QuestCardProps> = ({ quest, viewedQuests, onSelect, co
                 </div>
                 {isQuestComplete ? (
                      <div className="flex items-center gap-2 text-green-400 font-semibold">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 animate-scale-up" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
-                        Completed
+                        <span className="animate-fade-in">Completed</span>
                     </div>
                 ) : (
                     <button onClick={() => onSelect(quest)} className="bg-yellow-400 text-gray-900 font-bold py-2 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-200 text-sm">

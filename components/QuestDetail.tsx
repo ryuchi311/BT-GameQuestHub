@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { Quest, QuestDifficulty, QuestPlatform, QuestType, VerificationType } from '../types';
+import { User, Quest, QuestDifficulty, QuestPlatform, QuestType, VerificationType } from '../types';
 import { YouTubeIcon, TwitterIcon, TelegramIcon, DiscordIcon, TikTokIcon, CustomUrlIcon, CoinIcon, PartnerIcon } from './icons/PlatformIcons';
 import { ManualVerificationIcon, AutomaticVerificationIcon } from './icons/VerificationIcons';
+import { Loader2 } from 'lucide-react';
 
 interface QuestDetailProps {
+    user: User;
     quest: Quest;
     onGoBack: () => void;
     onComplete: (quest: Quest) => void;
@@ -30,7 +32,7 @@ const difficultyColors: Record<QuestDifficulty, string> = {
     [QuestDifficulty.Epic]: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
 };
 
-const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, onManualSubmit }) => {
+const QuestDetail: React.FC<QuestDetailProps> = ({ user, quest, onGoBack, onComplete, onManualSubmit }) => {
     const PlatformIcon = platformIcons[quest.platform];
     
     const [viewedQuestLink, setViewedQuestLink] = useState(false);
@@ -44,6 +46,10 @@ const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, 
     // Countdown state
     const [claimCountdown, setClaimCountdown] = useState(60);
     const [isCountdownActive, setIsCountdownActive] = useState(false);
+    const [isManualSubmitting, setIsManualSubmitting] = useState(false);
+
+    // Mock data for Telegram verification simulation
+    const mockTelegramGroupMembers = ['@tamagoplayer', '@ninja', '@shadow', '@phoenix'];
 
     useEffect(() => {
         if (isCountdownActive && claimCountdown > 0) {
@@ -72,7 +78,20 @@ const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, 
         setTimeout(() => {
             setIsLoading(false);
             let isSuccess = false;
-            if (quest.type === QuestType.Watch) {
+
+            if (quest.platform === QuestPlatform.Telegram) {
+                if (!user.telegramUsername) {
+                    setValidationError('Please set your Telegram username in your profile to verify.');
+                    return;
+                }
+                const username = user.telegramUsername.startsWith('@') ? user.telegramUsername : `@${user.telegramUsername}`;
+                // Case-insensitive check
+                if (mockTelegramGroupMembers.map(m => m.toLowerCase()).includes(username.toLowerCase())) {
+                    isSuccess = true;
+                } else {
+                    setValidationError('Could not verify your membership. Please ensure you have joined the group and your username is correct in your profile.');
+                }
+            } else if (quest.type === QuestType.Watch) {
                  if (formState.watchCode?.trim().toUpperCase() === quest.validationCode?.toUpperCase()) {
                     isSuccess = true;
                 } else {
@@ -89,9 +108,14 @@ const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, 
         }, 1500);
     };
 
-    const handleManualFormSubmit = (e: React.FormEvent) => {
+    const handleManualFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsManualSubmitting(true);
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
         onManualSubmit(quest);
+        // We don't set isManualSubmitting(false) because the parent will update 
+        // the quest status to 'pending', causing the UI to switch to the pending view.
     };
 
     if (submissionSuccess) {
@@ -123,8 +147,19 @@ const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, 
                         <input type={field.type || 'text'} value={formState[field.name] || ''} onChange={(e) => setFormState(prev => ({...prev, [field.name]: e.target.value}))} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5" placeholder={field.placeholder} required />
                     </div>
                 ))}
-                <button type="submit" className="w-full bg-yellow-400 text-gray-900 font-bold py-2.5 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-200 text-sm">
-                    Submit for Verification
+                <button 
+                    type="submit" 
+                    disabled={isManualSubmitting}
+                    className={`w-full bg-yellow-400 text-gray-900 font-bold py-2.5 px-4 rounded-lg hover:bg-yellow-500 transition-colors duration-200 text-sm flex items-center justify-center ${isManualSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+                >
+                    {isManualSubmitting ? (
+                        <>
+                            <Loader2 className="animate-spin mr-2 h-5 w-5" />
+                            Submitting...
+                        </>
+                    ) : (
+                        'Submit for Verification'
+                    )}
                 </button>
             </div>
         </form>
@@ -217,15 +252,23 @@ const QuestDetail: React.FC<QuestDetailProps> = ({ quest, onGoBack, onComplete, 
             );
         }
         if (quest.platform === QuestPlatform.Telegram) {
+            const hasUsername = !!user.telegramUsername;
             return (
                 <form onSubmit={handleAutoSubmit}>
                     <h3 className="font-bold text-white mb-3">Verify Telegram Task</h3>
                     <div className="space-y-4 bg-gray-900/50 p-4 rounded-lg text-center">
-                        {/* FIX: Changed string literal 'Join' to enum QuestType.Join for type-safe comparison. */}
                         <p className="text-sm text-gray-300">After joining the {quest.type === QuestType.Join ? 'group' : 'channel'}, return here and click the button below to verify your membership.</p>
-                        {/* FIX: Changed string literal 'Join' to enum QuestType.Join for type-safe comparison. */}
                         {quest.type === QuestType.Join && <p className="text-xs text-gray-400">Our bot will check if your Telegram username from your profile matches a member in the group.</p>}
-                        <button type="submit" disabled={isLoading} className="w-full bg-sky-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-sky-600 transition-colors duration-200 text-sm disabled:bg-gray-600">
+                        
+                        {!hasUsername && (
+                            <p className="text-sm text-yellow-400 bg-yellow-500/10 p-2 rounded-md">
+                                Please set your Telegram username in your profile before verifying.
+                            </p>
+                        )}
+                        
+                        {validationError && <p className="text-sm text-red-400 mt-2">{validationError}</p>}
+                        
+                        <button type="submit" disabled={isLoading || !hasUsername} className="w-full bg-sky-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-sky-600 transition-colors duration-200 text-sm disabled:bg-gray-600 disabled:cursor-not-allowed">
                             {isLoading ? 'Verifying...' : 'Verify Me'}
                         </button>
                     </div>

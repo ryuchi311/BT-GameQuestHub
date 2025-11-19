@@ -205,7 +205,7 @@ const App: React.FC = () => {
         if (activeTab === 'Quests' && selectedQuest) {
             // Find the latest quest data from the main state to pass to detail view
             const currentQuestData = quests.find(q => q.id === selectedQuest.id) || selectedQuest;
-            return <QuestDetail quest={currentQuestData} onGoBack={handleGoBack} onComplete={handleQuestComplete} onManualSubmit={handleManualSubmit} />;
+            return <QuestDetail user={user} quest={currentQuestData} onGoBack={handleGoBack} onComplete={handleQuestComplete} onManualSubmit={handleManualSubmit} />;
         }
 
         switch (activeTab) {

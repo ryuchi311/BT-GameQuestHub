@@ -1,87 +1,114 @@
 
-# 🎮 Brgy Tamago GameHub
+# 🥚 Brgy Tamago GameHub
 
-A gamified social media quest platform designed as a Telegram Mini App. It allows users to complete various online tasks for points and rewards, featuring a comprehensive admin dashboard for management and manual verification.
+**Brgy Tamago GameHub** is a gamified social engagement platform designed as a Telegram Mini App. It incentivizes user interaction through a robust quest system, allowing users to earn points, climb leaderboards, and redeem rewards for completing social media tasks and challenges.
 
-## ✨ Core Features
+## 🌟 Key Features
 
-- **Dynamic Quest System**: Engage users with a variety of quests across multiple platforms.
-  - **Quest Types**: YouTube (Subscribe, Watch), Twitter/X (Follow, Like, Comment), Telegram (Join), Discord (Join), Referral links, and custom URL visits.
-  - **Categorized Filtering**: Easily filter quests by `All`, `Daily`, `Socials`, and `Sponsors`.
-  - **Visual Indicators**: New quests are highlighted with badges, and completed/pending quests are visually distinct.
+### 🗺️ Quest System
+- **Diverse Quest Types**: Supports YouTube (Subscribe, Watch), Twitter/X (Follow, Like, Retweet), Telegram (Join), Discord, TikTok, and custom URL visits.
+- **Smart Filtering**: Users can easily filter quests by **Daily**, **Socials**, or **Sponsors**.
+- **Verification Modes**:
+  - **Automatic**: Instant verification for API-supported tasks (simulated).
+  - **Manual**: User submits proof (screenshots/links) for admin review.
+  - **Timed**: Countdown timers for "Watch" and "Visit" tasks to ensure engagement.
+- **Status Tracking**: Visual indicators for **New**, **Completed**, and **Pending** quests.
 
-- **Advanced Verification Flows**:
-  - **Automatic (API-based)**: For tasks like Twitter follows or Telegram joins.
-  - **Manual Submission**: Users can submit proof (e.g., a Facebook link to a screenshot) for tasks requiring manual review.
-  - **Timed Verification**: Quests like "Watch a video" or "Visit a URL" feature countdown timers to ensure engagement before rewards can be claimed.
-  - **Status Tracking**: Quests can be in a `pending`, `approved`, or `rejected` state, with the UI updating accordingly.
+### 🏆 Gamification & Economy
+- **XP & Leveling**: Users earn XP to level up, unlocking prestige and potentially new quests.
+- **Points System**: A virtual currency earned by completing quests.
+- **Leaderboard**: Real-time ranking system (Overall, Weekly, Daily) to foster competition.
+- **Reward Store**: Users can spend points on digital or physical rewards (Gift cards, Badges, etc.).
 
-- **Gamification & Rewards**:
-  - **Leaderboard**: A competitive leaderboard ranking users by points.
-  - **Points & XP System**: Users earn points and experience for completing quests, displayed prominently in the user header.
-  - **Reward Store**: A dedicated "Rewards" tab where users can spend their points to claim items, featuring an animated confirmation modal.
+### 👤 User Profile
+- **Activity Log**: A transparent history of all actions (Completions, Claims, Failed submissions).
+- **Social Linking**: Profile management for linking social media handles for verification.
+- **Stats Overview**: Quick view of current level, XP progress, and total points.
 
-- **User-Centric Interface**:
-  - **Profile Management**: Users can view their social media usernames and edit them.
-  - **Activity Log**: A detailed history of all successful quests, failed submissions, and claimed rewards.
-  - **Responsive Design**: Built with Tailwind CSS for a clean, modern, and mobile-first experience suitable for a Telegram Mini App.
+### 🛡️ Admin Capabilities
+The codebase includes dedicated admin components (`/pages/Admin*.tsx`) designed to manage the platform:
+- **Quest Management**: Create, edit, and delete quests.
+- **Verification Hub**: Interface for approving or rejecting manual user submissions with proof review.
 
-## 🛠️ Tech Stack
+## 📱 UI Wireframes
 
-- **Frontend**: React 18+
+The application follows a dark-themed, mobile-first design optimized for Telegram Mini Apps. Below are the structural wireframes for the core user flows.
+
+| **Home / Quest List** | **Quest Detail** | **Leaderboard** |
+|:---:|:---:|:---:|
+| ![Home](https://placehold.co/350x700/111827/facc15?text=Header+Stats%0A+%0AFilter+Tabs%0A+%0AQuest+Cards%0A(List+View)) | ![Detail](https://placehold.co/350x700/111827/facc15?text=Quest+Info%0A+%0AReward+Details%0A+%0ASubmission+Form%0A(Upload/Input)) | ![Leaderboard](https://placehold.co/350x700/111827/facc15?text=Top+3+Podium%0A+%0ARanked+List%0A+%0AUser+Rank%0A(Sticky+Footer)) |
+
+| **Rewards Store** | **User Profile** | **Admin Panel** |
+|:---:|:---:|:---:|
+| ![Rewards](https://placehold.co/350x700/111827/facc15?text=User+Balance%0A+%0AReward+Grid%0A(Cards)%0A+%0AClaim+Modal) | ![Profile](https://placehold.co/350x700/111827/facc15?text=Avatar+&+XP%0A+%0ASocial+Links%0A+%0AActivity+Log) | ![Admin](https://placehold.co/350x700/1f2937/ef4444?text=Quest+Mgmt%0A+%0AVerification+Hub%0A(Approve/Reject)) |
+
+## 🛠️ Technology Stack
+
+- **Frontend Framework**: React 18 (Hooks, Functional Components)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Module System**: ESM (via import maps)
-- **API (Conceptual)**: Google Gemini API for potential future AI-assisted features.
+- **Styling**: Tailwind CSS (Utility-first design)
+- **Icons**: Lucide React & Custom SVG Icons
+- **Architecture**: Component-based, Mobile-first design suitable for Telegram Mini Apps.
+- **Data Management**: Mock API service pattern (`useMockData`, `mockApi`) ready for backend integration.
 
 ## 📂 Project Structure
 
-The project is organized into a clean and maintainable structure:
-
 ```
 /
-├── components/
-│   ├── icons/
-│   │   ├── ... (SVG icon components)
-│   ├── ActivityLogRow.tsx
-│   ├── BottomNav.tsx
-│   ├── ClaimRewardModal.tsx
-│   ├── Header.tsx
-│   ├── Leaderboard.tsx
-│   ├── LeaderboardRow.tsx
-│   ├── Profile.tsx
-│   ├── QuestCard.tsx
-│   ├── QuestDetail.tsx
-│   ├── QuestList.tsx
-│   ├── RewardCard.tsx
-│   └── Rewards.tsx
-├── hooks/
-│   └── useMockData.ts
-├── App.tsx
-├── index.html
-├── index.tsx
-├── metadata.json
-├── readme.md
-└── types.ts
+├── components/         # Reusable UI components
+│   ├── icons/          # Platform and UI icons
+│   ├── QuestList.tsx   # Main quest feed
+│   ├── QuestCard.tsx   # Individual quest display
+│   ├── QuestDetail.tsx # Quest interaction & verification view
+│   ├── Leaderboard.tsx # Ranking display
+│   └── ...
+├── hooks/              # Custom React hooks
+│   ├── useMockData.ts  # Initial state hydration
+│   └── useCountdown.ts # Timer logic
+├── pages/              # Admin & Page-level components
+│   ├── AdminDashboard.tsx
+│   ├── AdminVerificationHub.tsx
+│   └── ...
+├── services/           # API simulation
+│   └── mockApi.ts      # Mock backend methods
+├── types.ts            # TypeScript definitions
+├── App.tsx             # Main application entry & routing logic
+└── index.html          # Entry HTML with Import Map
 ```
 
-- **`App.tsx`**: The main application component that manages global state and routing between different views.
-- **`components/`**: Contains all reusable React components, from small UI elements like icons to major page views like `QuestDetail`.
-- **`hooks/`**: Holds custom React hooks. `useMockData.ts` currently serves as a mock backend, providing all necessary data for the app.
-- **`types.ts`**: Defines all shared TypeScript interfaces and types, ensuring type safety across the application.
-- **`index.html`**: The main HTML entry point, which includes the import map for ESM modules and Tailwind CSS.
+## 🚀 Getting Started
 
-## 🚀 How to Run (Conceptual)
+This project uses ES Modules via `importmap` in `index.html`, allowing it to run in modern browsers without a complex build step for development, provided the environment supports TypeScript on-the-fly or you have a build process in place.
 
-1.  **Prerequisites**: Ensure you have Node.js and a package manager like `npm` or `yarn` installed.
-2.  **Installation**: Run `npm install` in the root directory to install dependencies.
-3.  **Environment**: Create a `.env` file and add your `API_KEY` for the Google Gemini SDK (if implementing AI features).
-4.  **Start**: Run `npm start` to launch the development server.
+### Running the Project
 
-## 🧩 Key Components Explained
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/brgy-tamago-gamehub.git
+   ```
 
-- **`QuestList.tsx`**: The main dashboard for users. It displays a filterable list of all available quests. It dynamically shows notification badges for categories with new quests.
-- **`QuestCard.tsx`**: A summary card for a single quest. It shows the title, platform, reward, and status (New, Completed, Pending).
-- **`QuestDetail.tsx`**: A detailed view that opens when a user starts a quest. It contains specific instructions and the appropriate verification UI (e.g., code input, screenshot link submission, API verification button).
-- **`ClaimRewardModal.tsx`**: An animated modal that provides a final confirmation step before a user spends points on a reward, complete with loading and success states.
-- **`Profile.tsx`**: Allows users to manage their social media usernames and view a complete history of their in-app activities.
+2. **Serve the directory**
+   Use any static file server (e.g., VS Code Live Server, `http-server`, or `python -m http.server`).
+
+3. **Open in Browser**
+   Navigate to `http://localhost:8080` (or your server's port).
+
+## ⚙️ Configuration
+
+- **Metadata**: Update `metadata.json` for Telegram Mini App settings.
+- **Mock Data**: Edit `services/mockApi.ts` or `hooks/useMockData.ts` to change initial quests, users, and rewards for testing.
+- **Styles**: Global styles and Tailwind imports are managed via `index.html` CDN.
+
+## 🎨 Customization
+
+### Adding a New Quest Platform
+1. Add the platform enum in `types.ts`.
+2. Create a corresponding icon in `components/icons/PlatformIcons.tsx`.
+3. Update the `platformIcons` map in `components/QuestCard.tsx` and `components/QuestDetail.tsx`.
+
+### Changing Theme
+The app uses a dark mode theme by default (`bg-gray-900`, `text-gray-50`). Modify `index.html` styles or Tailwind classes to adjust the color palette.
+
+---
+
+Developed for the Brgy Tamago Community. 🥚
